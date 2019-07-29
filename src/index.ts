@@ -5,7 +5,7 @@ import { sessionMiddleware } from './middleware/session.middleware';
 import { authRouter } from './routers/auth.router';
 import bodyParser from 'body-parser';
 
-const port = +process.env.APP_PORT;
+const port = +process.env.PORT;
 const app = express();
 
 /**
