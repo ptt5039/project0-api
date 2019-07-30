@@ -39,8 +39,9 @@ app.use('/users', usersRouter);
 app.use('/reimbursements', reimbursementsRouter);
 app.use(authRouter);
 
-app.use('/logout', (req, res) => {
+app.post('/logout', (req, res) => {
   req.session.destroy(() => { });
+  res.send('logout successful!');
 });
 
 app.listen(port, () => {
