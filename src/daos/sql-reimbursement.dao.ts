@@ -4,6 +4,7 @@ import { convertReimbursement } from '../utils/reimbursement.converter';
 import { Reimbursement } from '../models/reimbursement';
 import { typeConverter } from '../utils/reimbursement-type.converter';
 import { statusConverter } from '../utils/reimbursement-status.converter';
+import { type } from 'os';
 
 export async function findReimbursementByStatusId(statusId: number) {
     let client: PoolClient;
@@ -124,9 +125,8 @@ export async function getType() {
         const queryString = `
             SELECT * FROM reimbursement_type
         `;
-        const results = await client.query(queryString);
-        const sqlType = results.rows[0];
-        return typeConverter(sqlType);
+        const result = await client.query(queryString);
+        return result && result.rows.map(typeConverter)
     } catch (err) {
         console.log(err);
     } finally {
@@ -142,9 +142,8 @@ export async function getStatus() {
         const queryString = `
             SELECT * FROM reimbursement_status
         `;
-        const results = await client.query(queryString);
-        const sqlStatus = results.rows[0];
-        return statusConverter(sqlStatus);
+        const result = await client.query(queryString);
+        return result && result.rows.map(typeConverter)
     } catch (err) {
         console.log(err);
     } finally {
