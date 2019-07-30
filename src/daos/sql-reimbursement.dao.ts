@@ -126,7 +126,7 @@ export async function getType() {
             SELECT * FROM reimbursement_type
         `;
         const result = await client.query(queryString);
-        return result && result.rows.map(typeConverter)
+        return result && result.rows.map(typeConverter);
     } catch (err) {
         console.log(err);
     } finally {
@@ -143,7 +143,7 @@ export async function getStatus() {
             SELECT * FROM reimbursement_status
         `;
         const result = await client.query(queryString);
-        return result && result.rows.map(typeConverter)
+        return result && result.rows.map(typeConverter);
     } catch (err) {
         console.log(err);
     } finally {
