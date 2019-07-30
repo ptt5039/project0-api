@@ -4,7 +4,6 @@ import { convertReimbursement } from '../utils/reimbursement.converter';
 import { Reimbursement } from '../models/reimbursement';
 import { typeConverter } from '../utils/reimbursement-type.converter';
 import { statusConverter } from '../utils/reimbursement-status.converter';
-import { type } from 'os';
 
 export async function findReimbursementByStatusId(statusId: number) {
     let client: PoolClient;
@@ -143,7 +142,7 @@ export async function getStatus() {
             SELECT * FROM reimbursement_status
         `;
         const result = await client.query(queryString);
-        return result && result.rows.map(typeConverter);
+        return result && result.rows.map(statusConverter);
     } catch (err) {
         console.log(err);
     } finally {
