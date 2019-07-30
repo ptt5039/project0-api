@@ -9,6 +9,16 @@ reimbursementsRouter.get('/status/:statusId', [authMiddleware('finance-manager',
     res.json(reimbursements);
 }]);
 
+reimbursementsRouter.get('/status', async (req, res) => {
+    const statuses = await reimbursementDao.getStatus();
+    res.json(statuses);
+});
+
+reimbursementsRouter.get('/type', async (req, res) => {
+    const types = await reimbursementDao.getType();
+    res.json(types);
+});
+
 reimbursementsRouter.get('/:id', [authMiddleware('finance-manager', 'admin', 'associate'), async (req, res) => {
     const reimbursement = await reimbursementDao.findReimbursementById(+req.params.id);
     res.json(reimbursement);

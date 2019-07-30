@@ -2,6 +2,8 @@ import { PoolClient } from 'pg';
 import { connectionPool } from '../utils/connection.util';
 import { convertReimbursement } from '../utils/reimbursement.converter';
 import { Reimbursement } from '../models/reimbursement';
+import { typeConverter } from '../utils/reimbursement-type.converter';
+import { statusConverter } from '../utils/reimbursement-status.converter';
 
 export async function findReimbursementByStatusId(statusId: number) {
     let client: PoolClient;
@@ -109,6 +111,42 @@ export async function updateReimbursement(reimbursement: Partial<Reimbursement>)
         return convertReimbursement(sqlReimbursement);
     } catch (error) {
         console.log(error);
+    } finally {
+        client && client.release();
+    }
+    return undefined;
+}
+
+export async function getType() {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect();
+        const queryString = `
+            SELECT * FROM reimbursement_type
+        `;
+        const results = await client.query(queryString);
+        const sqlType = results.rows[0];
+        return typeConverter(sqlType);
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    return undefined;
+}
+
+export async function getStatus() {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect();
+        const queryString = `
+            SELECT * FROM reimbursement_status
+        `;
+        const results = await client.query(queryString);
+        const sqlStatus = results.rows[0];
+        return statusConverter(sqlStatus);
+    } catch (err) {
+        console.log(err);
     } finally {
         client && client.release();
     }
