@@ -20,5 +20,9 @@ async (req, res) => {
 usersRouter.patch('', [authMiddleware('admin'),
 async (req, res) => {
     const user = await userDao.updateUser(req.body);
-    res.json(user);
+    if (user) {
+        req.session.user = user;
+        res.json(user);
+    }
+
 }]);

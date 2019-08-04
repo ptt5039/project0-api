@@ -5,7 +5,7 @@ import * as reimbursementDao from '../daos/sql-reimbursement.dao';
 export const reimbursementsRouter = express.Router();
 
 reimbursementsRouter.get('/status/:statusId', [authMiddleware('finance-manager', 'admin'), async (req, res) => {
-    const reimbursements = await reimbursementDao.findReimbursementByStatusId(+req.params.statusId);
+    const reimbursements = await reimbursementDao.findReimbursementByStatusId(req);
     res.json(reimbursements);
 }]);
 

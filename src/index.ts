@@ -5,7 +5,7 @@ import { sessionMiddleware } from './middleware/session.middleware';
 import { authRouter } from './routers/auth.router';
 import bodyParser from 'body-parser';
 
-const port = +process.env.PORT;
+const port = +process.env.PORT || 8012;
 const app = express();
 
 /**
@@ -39,10 +39,6 @@ app.use('/users', usersRouter);
 app.use('/reimbursements', reimbursementsRouter);
 app.use(authRouter);
 
-app.post('/logout', (req, res) => {
-  req.session.destroy(() => { });
-  res.send('logout successful!');
-});
 
 app.listen(port, () => {
   console.log('app started on port: ' + port);

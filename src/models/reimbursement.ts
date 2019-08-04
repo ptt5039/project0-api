@@ -12,6 +12,7 @@ export class Reimbursement {
         public description: string, // not null
         public resolver: User, // foreign key -> User
         public status: ReimbursementStatus, // foreign ey -> ReimbursementStatus, not null
-        public type: ReimbursementType
+        public type: ReimbursementType,
+        public totalRow: number
     ) { }
 }

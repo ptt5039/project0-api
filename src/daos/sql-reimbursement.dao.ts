@@ -5,16 +5,19 @@ import { Reimbursement } from '../models/reimbursement';
 import { typeConverter } from '../utils/reimbursement-type.converter';
 import { statusConverter } from '../utils/reimbursement-status.converter';
 
-export async function findReimbursementByStatusId(statusId: number) {
+export async function findReimbursementByStatusId(req) {
     let client: PoolClient;
     try {
         client = await connectionPool.connect();
         const queryString = `
-            SELECT * FROM reimbursement_view
+            SELECT reimbursement_view.*, COUNT(*) OVER() AS total_row FROM reimbursement_view
                     WHERE statusid = $1
                     ORDER BY datesubmitted
+                    LIMIT $2
+                    OFFSET $3
             `;
-        const result = await client.query(queryString, [statusId]);
+        const result = await client.query(queryString, [req.params.statusId, req.query.limit, req.query.offset]);
+        console.log(result);
         return result && result.rows.map(convertReimbursement);
     } catch (err) {
         console.log(err);

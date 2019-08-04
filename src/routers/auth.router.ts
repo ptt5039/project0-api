@@ -17,6 +17,11 @@ authRouter.post('/login', async (req, res) => {
     }
 });
 
+authRouter.post('/logout', (req, res) => {
+    req.session.destroy(() => { });
+    res.status(200);
+  });
+
 authRouter.get('/check-session', (req, res) => {
     res.json(req.session);
 });
