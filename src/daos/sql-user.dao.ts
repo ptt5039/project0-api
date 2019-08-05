@@ -70,12 +70,22 @@ export async function updateUser(user: Partial<User>) {
     let client: PoolClient;
     try {
         client = await connectionPool.connect(); // basically .then is everything after this
-        const queryString = `
-            UPDATE app_user SET username = $1, pass = $2, firstname = $3, lastname = $4, email = $5, roleid = $6
-            WHERE userid = $7
+        let queryString = '';
+        let params = [];
+        if (!user.password) {
+            queryString = `
+            UPDATE app_user SET username = $1, firstname = $2, lastname = $3, email = $4, roleid = $5
+            WHERE userid = $6
             RETURNING *
         `;
-        const params = [user.username, user.password, user.firstName, user.lastName, user.email, user.role.roleId, user.userId];
+            params = [user.username, user.firstName, user.lastName, user.email, user.role.roleId, user.userId];
+        } else {
+            queryString = `
+            UPDATE app_user SET username = $1, pass = $2, firstname = $3, lastname = $4, email = $5, roleid = $6
+            WHERE userid = $7
+            RETURNING *`;
+            params = [user.username, user.password, user.firstName, user.lastName, user.email, user.role.roleId, user.userId];
+        }
         const result = await client.query(queryString, params);
         const sqlUser = result.rows[0];
         return convertUser(sqlUser);
