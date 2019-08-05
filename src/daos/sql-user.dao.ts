@@ -88,7 +88,9 @@ export async function updateUser(user: Partial<User>) {
         }
         const result = await client.query(queryString, params);
         const sqlUser = result.rows[0];
-        return convertUser(sqlUser);
+        const newUser = convertUser(sqlUser);
+        const userWithRole = await findById(newUser.userId);
+        return userWithRole;
     } catch (err) {
         console.log(err);
     } finally {

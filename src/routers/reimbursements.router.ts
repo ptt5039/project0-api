@@ -34,6 +34,11 @@ reimbursementsRouter.patch('', [authMiddleware('finance-manager', 'admin'), asyn
     res.json(reimbursement);
 }]);
 
+reimbursementsRouter.get('', [authMiddleware('finance-manager', 'admin'), async (req, res) => {
+    const reimbursements = await reimbursementDao.findAll();
+    res.json(reimbursements);
+}]);
+
 reimbursementsRouter.post('', async (req, res) => {
     req.body.author.userId = req.session.user.userId;
     const reimbursement = await reimbursementDao.createReimbursement(req.body);

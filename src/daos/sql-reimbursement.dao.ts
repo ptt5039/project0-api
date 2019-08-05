@@ -5,6 +5,25 @@ import { Reimbursement } from '../models/reimbursement';
 import { typeConverter } from '../utils/reimbursement-type.converter';
 import { statusConverter } from '../utils/reimbursement-status.converter';
 
+
+export async function findAll() {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect();
+        const queryString = `
+            SELECT * FROM reimbursement_view
+                ORDER BY datesubmitted
+            `;
+        const result = await client.query(queryString);
+        return result && result.rows.map(convertReimbursement);
+    } catch (err) {
+        console.log(err);
+    } finally {
+        client && client.release();
+    }
+    return undefined;
+}
+
 export async function findReimbursementByStatusId(req) {
     let client: PoolClient;
     try {
