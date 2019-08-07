@@ -9,6 +9,11 @@ usersRouter.get('', [authMiddleware('finance-manager', 'admin'), async (req, res
     res.json(users);
 }]);
 
+usersRouter.get('/role', [authMiddleware('finance-manager', 'admin'), async (req, res) => {
+    const roles = await userDao.getRole();
+    res.json(roles);
+}]);
+
 usersRouter.get('/:id', [authMiddleware('finance-manager', 'admin', 'associate'),
 async (req, res) => {
     const user = await userDao.findById(+req.params.id);

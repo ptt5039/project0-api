@@ -2,6 +2,25 @@ import { PoolClient } from 'pg';
 import { connectionPool } from '../utils/connection.util';
 import { convertUser } from '../utils/user.converter';
 import { User } from '../models/user';
+import { roleConverter } from '../utils/role.converter';
+
+export async function getRole() {
+    let client: PoolClient;
+    try {
+        client = await connectionPool.connect();
+        const queryString = `
+                SELECT * FROM user_role
+        `;
+        const result = await client.query(queryString);
+        const rows = result.rows;
+        return rows && rows.map(roleConverter);
+    } catch (error) {
+        console.log(error);
+    } finally {
+        client && client.release();
+    }
+    return undefined;
+}
 
 export async function findByUsernameAndPassword(username: string, password: string) {
     let client: PoolClient;
